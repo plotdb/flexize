@@ -5,18 +5,30 @@ html
     {name: "bootstrap", path: "dist/css/bootstrap.min.css"},
     {name: "@loadingio/bootstrap.ext"}
     ])
+    style(type="text/css"): include:stylus index.styl
   body
-    .m-5
-      .border.rounded.w-100.d-flex.align-item-stretch.flex-nowrap(ld="root", style="height:500px")
-        .bg-light.d-flex.justify-content-end(style="flex-basis:50%") Some Text
-        .bg-dark.gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
-        .bg-light.d-flex.justify-content-start(style="flex-basis:50%") Some Text
+    .p-4.w-100.h-100
+      .d-flex.g-4.w-100.h-100.align-items-stretch.p-4.border
+        .flex-grow-1.w-50
+          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
+            .cell.dark(style="flex-basis:10%") Fixed Panel
+            .cell(style="flex-basis:30%") Flex Panel
+            .bg-dark.gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+            .cell(style="flex-basis:30%") Flex Panel
+            .bg-dark.gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+            .cell(style="flex-basis:30%") Flex Panel
+        .flex-grow-1.w-50.align-items-stretch
+          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
+            .cell.dark(style="flex-basis:50%") Fixed Panel
+            .cell(style="flex-basis:50%") Some Text
+            .bg-dark.gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
+            .cell(style="flex-basis:50%") Some Text
+
     +script([
     {name: "@loadingio/debounce.js"},
     {name: "@loadingio/ldquery"},
     {name: "proxise"},
-    {name: "ldview"}
+    {name: "ldview"},
+    {name: "flexize", version: "dev"}
     ])
-    script(type="module")
-      include:lsc flexize.ls
-      include:lsc index.ls
+    script(type="module"): include:lsc index.ls

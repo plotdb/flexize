@@ -1,2 +1,4 @@
-view = new ldview root: document.body
-res = new flexize root: view.get(\root)
+view = new ldview do
+  root: document.body
+  init:
+    root: ({node}) -> res = new flexize root: node
