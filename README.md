@@ -1,4 +1,4 @@
-# Resizable
+# Flexize
 
 A lightweight, flexible panel resizing utility written in LiveScript that provides smooth drag-to-resize functionality for split-panel layouts with minimal configuration.
 
@@ -7,8 +7,14 @@ A lightweight, flexible panel resizing utility written in LiveScript that provid
 
 ### Browser
 
-    <script src="resizable.js"></script>
+install:
 
+    npm install --save flexize
+
+
+and include the main script ( from local or cdn if available ):
+
+    <script src="index.min.js"></script>
 
 
 ## Quick Start
@@ -16,7 +22,7 @@ A lightweight, flexible panel resizing utility written in LiveScript that provid
 ### HTML Structure (Pug Syntax)
 
 ```pug
-.resizable-container#my-container
+.flexize-container#my-container
   .panel.left-panel
     h3 Left Panel
     p Your content here...
@@ -35,18 +41,17 @@ A lightweight, flexible panel resizing utility written in LiveScript that provid
 - Gutters must be visible and clickable with appropriate cursor
 - Gutters must not shrink: `flex-shrink: 0`
 
-
 ### JavaScript Initialization
 
 Basic usage example:
 
-    const myResizable = new resizable({
+    const myFlexizer = new flexize({
       root: document.querySelector('#my-container')
     });
 
 With custom options:
 
-    const customResizable = new resizable({
+    const customFlexizer = new flexize({
       root: document.querySelector('#my-container'),
       minWidth: 150,
       gutterSelector: '.divider'
@@ -57,7 +62,7 @@ With custom options:
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `root` | DOM Element | **Required** | Container element holding the resizable panels |
+| `root` | DOM Element | **Required** | Container element holding the flexize panels |
 | `minWidth` | Number | `100` | Minimum width for panels (in pixels) |
 | `gutterSelector` | String | `'.gutter'` | CSS selector for drag dividers |
 
@@ -66,21 +71,22 @@ With custom options:
 
 ### Constructor
 
-Creates a new resizable instance:
+Creates a new flexize instance:
 
-    new resizable({root, minWidth, gutterSelector})
+    new flexize({root, minWidth, gutterSelector})
 
 ### Instance Properties
 
 - `root` - The container DOM element
 - `minWidth` - Minimum panel width constraint
 - `isDragging` - Current drag state (boolean)
+- `isHorizontal` - Layout direction (auto-detected)
 
 ### Methods
 
 #### `init()`
 
-Initializes event listeners and sets up the resizable functionality. Called automatically during construction.
+Initializes event listeners and sets up the flexize functionality. Called automatically during construction.
 
 #### `setupGutter(gutter)`
 
@@ -92,7 +98,7 @@ Attaches event listeners to a specific gutter element. Used internally during in
 ### Complete CSS Setup
 
 ```css
-.resizable-container {
+.flexize-container {
   display: flex;
   height: 400px;
   border: 1px solid #ccc;
@@ -127,18 +133,42 @@ Attaches event listeners to a specific gutter element. Used internally during in
 }
 ```
 
-### Multiple Resizable Containers
+### Vertical Layout Support
 
-Sidebar resizer:
+```css
+.vertical-flexize {
+  display: flex;
+  flex-direction: column; /* Automatically detected by flexize */
+  height: 600px;
+}
 
-    const sidebarResizable = new resizable({
+.top-panel {
+  flex-basis: 200px; /* Initial height */
+}
+
+.bottom-panel {
+  flex-basis: 400px; /* Initial height */
+}
+
+.horizontal-gutter {
+  height: 8px;
+  width: 100%;
+  cursor: row-resize; /* For vertical layouts */
+}
+```
+
+### Multiple Flexize Containers
+
+Sidebar flexizer:
+
+    const sidebarFlexizer = new flexize({
       root: document.querySelector('.sidebar-container'),
       minWidth: 200
     });
 
-Main content resizer:
+Main content flexizer:
 
-    const mainResizable = new resizable({
+    const mainFlexizer = new flexize({
       root: document.querySelector('.main-container'),
       minWidth: 300,
       gutterSelector: '.main-divider'
@@ -168,9 +198,9 @@ Main content resizer:
 
 ### Dynamic Panel Content
 
-Initialize resizable:
+Initialize flexize:
 
-    const resizable = new resizable({
+    const flexizer = new flexize({
       root: document.querySelector('#dynamic-container'),
       minWidth: 120
     });
@@ -187,18 +217,25 @@ Add dynamic content:
 
 ## How It Works
 
-The resizable module uses several key techniques:
+The flexize module uses several key techniques:
 
 1. **Flexbox Layout** - Panels use `flex-basis` for smooth, CSS-driven resizing
-2. **Document-level Events** - Mouse move/up events are attached to `document` to prevent losing drag state when cursor moves outside panels
-3. **Delta Calculations** - Tracks mouse movement distance to calculate new panel widths
-4. **Constraint Enforcement** - Prevents panels from shrinking below the specified minimum width
+2. **Auto Direction Detection** - Automatically detects `flex-direction` to support both horizontal and vertical layouts
+3. **Document-level Events** - Mouse move/up events are attached to `document` to prevent losing drag state when cursor moves outside panels
+4. **Delta Calculations** - Tracks mouse movement distance to calculate new panel sizes
+5. **Constraint Enforcement** - Prevents panels from shrinking below the specified minimum width
 
 ### Event Flow
 
 1. **MouseDown** on gutter → Start drag, store initial state
 2. **MouseMove** on document → Calculate deltas, update panel sizes
 3. **MouseUp** on document → End drag operation
+
+### Direction Detection
+
+Flexize automatically detects the container's `flex-direction`:
+- `row` / `row-reverse` → Horizontal resizing (width-based)
+- `column` / `column-reverse` → Vertical resizing (height-based)
 
 
 ## Browser Support
@@ -214,9 +251,10 @@ Requires CSS flexbox support.
 
 ## Performance Notes
 
-- Uses `flex-basis` instead of `width` for better performance
+- Uses `flex-basis` instead of `width`/`height` for better performance
 - Event listeners are efficiently managed with proper context binding
 - No polling or continuous DOM queries during resize operations
+- Auto-detects layout direction only once during initialization
 
 
 ## Troubleshooting
@@ -227,13 +265,18 @@ Requires CSS flexbox support.
 - Verify panels have initial `flex-basis` values
 
 **Drag Not Working**
-- Confirm gutter has `cursor: col-resize` and appropriate width
+- Confirm gutter has appropriate cursor (`col-resize` for horizontal, `row-resize` for vertical)
 - Check for JavaScript errors in browser console
 - Ensure root element is properly passed to constructor
 
 **Panels Too Small**
 - Adjust the `minWidth` option to a larger value
 - Check for CSS conflicts that might override flex properties
+
+**Wrong Resize Direction**
+- Flexize auto-detects from CSS `flex-direction`
+- Ensure your CSS has the correct `flex-direction` value
+- Check computed styles in browser dev tools
 
 
 ## Contributing
