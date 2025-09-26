@@ -5,8 +5,6 @@ A lightweight, flexible panel resizing utility written in LiveScript that provid
 
 ## Installation
 
-### Browser
-
 install:
 
     npm install --save flexize
@@ -26,9 +24,9 @@ and include the main script ( from local or cdn if available ):
   .panel.left-panel
     h3 Left Panel
     p Your content here...
-  
+
   .gutter
-  
+
   .panel.right-panel
     h3 Right Panel
     p Your content here...
@@ -37,9 +35,27 @@ and include the main script ( from local or cdn if available ):
 ### Minimal CSS Requirements
 
 - Container must be a flexbox: `display: flex`
-- Panels must have initial sizing via `flex-basis`
+- **Panels should use pixel values for `flex-basis`** to prevent resize jumps
+- **Use `flex-grow` and `flex-shrink` for responsive behavior**
 - Gutters must be visible and clickable with appropriate cursor
 - Gutters must not shrink: `flex-shrink: 0`
+
+### Important Sizing Guidelines
+
+**✅ Recommended approach:**
+
+    .panel {
+      flex-basis: 200px;    /* Minimum reserved space (pixels) */
+      flex-grow: 1;         /* Share remaining space proportionally */
+      flex-shrink: 1;       /* Allow shrinking when necessary */
+    }
+
+**❌ Avoid mixing units or using percentages for flex-basis:**
+
+    /* This causes resize jumps on first drag */
+    .panel-1 { flex-basis: 30%; }
+    .panel-2 { flex-basis: 200px; }
+    .panel-3 { flex-basis: 40%; }
 
 ### JavaScript Initialization
 
@@ -108,15 +124,17 @@ Attaches event listeners to a specific gutter element. Used internally during in
   padding: 20px;
   overflow: auto;
   box-sizing: border-box;
+  /* Recommended: Use flex shorthand for responsive panels */
+  flex: 1 1 200px; /* grow shrink basis */
 }
 
 .left-panel {
-  flex-basis: 300px; /* Initial width */
+  flex: 1 1 200px;  /* Minimum 200px, takes 1 share of remaining space */
   background: #f0f8ff;
 }
 
 .right-panel {
-  flex-basis: 500px; /* Initial width */
+  flex: 2 1 300px;  /* Minimum 300px, takes 2 shares of remaining space */
   background: #fff8f0;
 }
 
@@ -143,17 +161,18 @@ Attaches event listeners to a specific gutter element. Used internally during in
 }
 
 .top-panel {
-  flex-basis: 200px; /* Initial height */
+  flex: 1 1 150px;  /* Minimum 150px height, grows proportionally */
 }
 
 .bottom-panel {
-  flex-basis: 400px; /* Initial height */
+  flex: 2 1 200px;  /* Minimum 200px height, takes 2x remaining space */
 }
 
 .horizontal-gutter {
   height: 8px;
   width: 100%;
   cursor: row-resize; /* For vertical layouts */
+  flex-shrink: 0;
 }
 ```
 
@@ -271,7 +290,13 @@ Requires CSS flexbox support.
 
 **Panels Too Small**
 - Adjust the `minWidth` option to a larger value
+- Ensure panels have adequate `flex-basis` values as minimum reserved space
 - Check for CSS conflicts that might override flex properties
+
+**Resize Jumps on First Drag**
+- Avoid mixing percentage and pixel units in `flex-basis`
+- Use pixel values for `flex-basis`: `flex-basis: 200px` instead of `flex-basis: 30%`
+- Consider using the `flex` shorthand: `flex: 1 1 200px`
 
 **Wrong Resize Direction**
 - Flexize auto-detects from CSS `flex-direction`
