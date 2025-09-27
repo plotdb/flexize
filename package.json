@@ -1,7 +1,7 @@
 {
   "name": "flexize",
-  "version": "0.0.1",
-  "description": "A lightweight, flexible panel resizing utility written in LiveScript that provides smooth drag-to-resize functionality for split-panel layouts with minimal configuration.",
+  "version": "0.0.2",
+  "description": "flex-grow-based panel resizing tool for flexbox",
   "main": "dist/index.min.js",
   "scripts": {
     "start": "npx server -r web -o true"
