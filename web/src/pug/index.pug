@@ -11,18 +11,24 @@ html
       .d-flex.g-4.w-100.h-100.align-items-stretch.p-4.border
         .flex-grow-1.w-50
           .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
-            .cell.dark(style="flex-basis:10%") Fixed Panel
-            .cell(style="flex-basis:30%") Flex Panel
-            .bg-dark.gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-            .cell(style="flex-basis:30%") Flex Panel
-            .bg-dark.gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-            .cell(style="flex-basis:30%") Flex Panel
+            .cell.dark(style="flex-basis:10%;padding:.5em 0")
+              div Fixed Panel
+              .d-flex.g-2
+                .btn.btn-primary(ld="reset") Reset
+                .btn.btn-primary(ld="hide") Hide
+            .cell(style="flex:1 0 10%") Flex Panel
+            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+            .cell.flexize-fixed(ld="middle",style="flex:0 0 10%") Fixed Panel
+            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+            .cell(ld="middle",style="flex:0 0 10%") Flex Panel
+            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+            .cell(style="flex: 0 0 10%") Flex Panel
         .flex-grow-1.w-50.align-items-stretch
           .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
-            .cell.dark(style="flex-basis:50%") Fixed Panel
-            .cell(style="flex-basis:50%") Some Text
-            .bg-dark.gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
-            .cell(style="flex-basis:50%") Some Text
+            .cell.dark(style="flex-basis:10%") Fixed Panel
+            .cell(style="flex:1 0 10%") Some Text
+            .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
+            .cell(style="flex:0 0 10%") Some Text
 
     +script([
     {name: "@loadingio/debounce.js"},
