@@ -1,29 +1,28 @@
 (function(){
   var flexize, ref$;
   flexize = function(opt){
-    var visibleSibling, this$ = this;
+    var this$ = this;
     opt == null && (opt = {});
     this._ = {
       opt: opt,
-      selector: opt.gutterSelector || '.flexize-gutter'
+      root: typeof opt.root === 'string'
+        ? document.body.querySelector(opt.root)
+        : opt.root,
+      selector: {
+        gutter: opt.gutterSelector || '.flexize-gutter',
+        fixed: opt.fixedSelector || '.flexize-fixed'
+      }
     };
-    this.root = opt.root;
     this.build();
     this.estimate();
-    visibleSibling = function(n, d){
-      d = d < 0 ? 'previousSibling' : 'nextSibling';
-      while ((n = n[d]) && (getComputedStyle(n).display === 'none' || this$._.gutterSet.has(n) || n.classList.contains('flexize-fixed'))) {}
-      return n;
-    };
     this._.gutters.forEach(function(g){
       return g.addEventListener('mousedown', function(evt){
         var attr, ref$, pn, nn;
         this$.estimate();
         attr = this$.attr();
         ref$ = [g.previousSibling, g.nextSibling], pn = ref$[0], nn = ref$[1];
-        pn = visibleSibling(g, -1);
-        nn = visibleSibling(g, 1);
-        console.log(pn, nn);
+        pn = this$._visibleSibling(g, -1);
+        nn = this$._visibleSibling(g, 1);
         if (!(pn && nn)) {
           return;
         }
@@ -47,11 +46,12 @@
       });
     });
     window.addEventListener('mousemove', function(evt){
-      var drag, attr, delta, ref$, n1, n2, s1, s2, g1, g2, percent, ng1, ng2;
+      var drag, attr, reverse, delta, ref$, n1, n2, s1, s2, g1, g2, percent, ng1, ng2;
       if (!((drag = this$._.drag) && evt.buttons & 1)) {
         return this$._.drag = null;
       }
       attr = this$.attr();
+      reverse = this$.reverse();
       delta = this$.dir() === 'row'
         ? evt.clientX - drag.ptr.x
         : evt.clientY - drag.ptr.y;
@@ -64,6 +64,9 @@
       ref$ = delta < 0
         ? [drag.f.p, drag.f.n]
         : [drag.f.n, drag.f.p], g1 = ref$[0], g2 = ref$[1];
+      if (reverse) {
+        ref$ = [n2, n1, s2, s1, g2, g1], n1 = ref$[0], n2 = ref$[1], s1 = ref$[2], s2 = ref$[3], g1 = ref$[4], g2 = ref$[5];
+      }
       percent = -Math.abs(delta / this$._.freeSpace) * this$._.totalGrow;
       ng1 = (ref$ = g1 + percent) > 0 ? ref$ : 0;
       ng2 = g2 + (g1 - ng1);
@@ -72,23 +75,27 @@
     });
     return this;
   };
-  flexize.prototype = (ref$ = Object.create(Object.prototype), ref$.init = function(){}, ref$.dir = function(){
+  flexize.prototype = (ref$ = Object.create(Object.prototype), ref$.dir = function(){
     var that, s, ref$;
     if (that = this._.dir) {
       return that;
     }
-    s = getComputedStyle(this.root);
-    return this._.dir = (ref$ = s.flexDirection || 'row') === 'row' || ref$ === 'row-reverse' ? 'row' : 'column';
+    s = getComputedStyle(this._.root);
+    this._.cssdir = s.flexDirection;
+    return this._.dir = (ref$ = this._.cssdir || 'row') === 'row' || ref$ === 'row-reverse' ? 'row' : 'column';
   }, ref$.attr = function(){
     if (this.dir() === 'row') {
       return 'width';
     } else {
       return 'height';
     }
+  }, ref$.reverse = function(){
+    this.dir();
+    return !!/reverse/.exec(this._.cssdir || '');
   }, ref$.estimate = function(){
     var attr, nodes, gs, sum, size, nsize, space;
     attr = this.attr();
-    nodes = Array.from(this.root.childNodes);
+    nodes = Array.from(this._.root.childNodes);
     gs = nodes.map(function(n){
       return +getComputedStyle(n).flexGrow;
     });
@@ -98,7 +105,7 @@
     nodes.map(function(n){
       return n.style.flexGrow = 0;
     });
-    size = this.root.getBoundingClientRect()[attr];
+    size = this._.root.getBoundingClientRect()[attr];
     nsize = nodes.map(function(n){
       return n.getBoundingClientRect()[attr];
     });
@@ -109,10 +116,11 @@
       return n.style.flexGrow = gs[i];
     });
     this._.freeSpace = space;
-    return this._.totalGrow = sum;
+    this._.totalGrow = sum;
+    return this._.intialGrow = gs;
   }, ref$.build = function(){
     var set;
-    this._.gutters = Array.from(this.root.querySelectorAll(this._.selector));
+    this._.gutters = Array.from(this._.root.querySelectorAll(this._.selector.gutter));
     this._.gutterSet = new Set(this._.gutters);
     set = new Set();
     this._.gutters.map(function(g){
@@ -129,6 +137,17 @@
       return n.style.flexGrow = v[i] || 0;
     });
     return this.estimate();
+  }, ref$.reset = function(){
+    var this$ = this;
+    Array.from(this._.root.childNodes).map(function(n, i){
+      return n.style.flexGrow = this$._.initialGrow[i];
+    });
+    this.build();
+    return this.estimate();
+  }, ref$._visibleSibling = function(n, d){
+    d = d < 0 ? 'previousSibling' : 'nextSibling';
+    while ((n = n[d]) && (getComputedStyle(n).display === 'none' || this._.gutterSet.has(n) || n.matches(this._.selector.fixed))) {}
+    return n;
   }, ref$);
   if (typeof window != 'undefined' && window !== null) {
     window.flexize = flexize;
