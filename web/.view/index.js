@@ -160,7 +160,7 @@ pug_mixins["script"]([
     {name: "ldview"},
     {name: "flexize", version: "dev"}
     ]);
-pug_html = pug_html + "\u003Cscript type=\"module\"\u003Evar ress,view;ress=[];view=new ldview({root:document.body,init:{root:function(e){var n,r;n=e.node;return ress.push(r=new flexize({root:n}))}},action:{click:{reset:function(){return ress[0].set([0,1,1])},hide:function(){return view.get(\"middle\").style.display=\"none\"}}}});\u003C\u002Fscript\u003E\u003C\u002Fbody\u003E\u003C\u002Fhtml\u003E";
+pug_html = pug_html + "\u003Cscript type=\"module\"\u003Evar ress,view;ress=[];view=new ldview({root:document.body,init:{root:function(e){var i,t;i=e.node;return ress.push(t=new flexize({root:i}))}},action:{click:{reset:function(){ress[1].set([0,1,1]);return view.get(\"middle\").style.display=\"\"},hide:function(){return view.get(\"middle\").style.display=\"none\"}}}});\u003C\u002Fscript\u003E\u003C\u002Fbody\u003E\u003C\u002Fhtml\u003E";
     }.call(this, "Array" in locals_for_with ?
         locals_for_with.Array :
         typeof Array !== 'undefined' ? Array : undefined, "c" in locals_for_with ?
