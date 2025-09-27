@@ -1,7 +1,7 @@
 (function(){
   var flexize, ref$;
   flexize = function(opt){
-    var this$ = this;
+    var moveHandler, this$ = this;
     opt == null && (opt = {});
     this._ = {
       opt: opt,
@@ -26,7 +26,7 @@
         if (!(pn && nn)) {
           return;
         }
-        return this$._.drag = {
+        this$._.drag = {
           ptr: {
             x: evt.clientX,
             y: evt.clientY
@@ -43,12 +43,15 @@
             n: +getComputedStyle(nn).flexGrow
           }
         };
+        return window.addEventListener('mousemove', moveHandler);
       });
     });
-    window.addEventListener('mousemove', function(evt){
+    moveHandler = function(evt){
       var drag, attr, reverse, delta, ref$, n1, n2, s1, s2, g1, g2, percent, ng1, ng2;
       if (!((drag = this$._.drag) && evt.buttons & 1)) {
-        return this$._.drag = null;
+        this$._.drag = null;
+        window.removeEventListener('mousemove', moveHandler);
+        return;
       }
       attr = this$.attr();
       reverse = this$.reverse();
@@ -72,7 +75,7 @@
       ng2 = g2 + (g1 - ng1);
       n1.style.flexGrow = ng1;
       return n2.style.flexGrow = ng2;
-    });
+    };
     return this;
   };
   flexize.prototype = (ref$ = Object.create(Object.prototype), ref$.dir = function(){

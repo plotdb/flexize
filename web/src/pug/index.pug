@@ -8,27 +8,39 @@ html
     style(type="text/css"): include:stylus index.styl
   body
     .p-4.w-100.h-100
-      .d-flex.g-4.w-100.h-100.align-items-stretch.p-4.border
-        .flex-grow-1.w-50
-          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
-            .cell.dark(style="flex-basis:10%;padding:.5em 0")
-              div Fixed Panel
-              .d-flex.g-2
-                .btn.btn-primary(ld="reset") Reset
-                .btn.btn-primary(ld="hide") Hide
-            .cell(style="flex:1 0 10%") Flex Panel
-            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-            .cell.flexize-fixed(ld="middle",style="flex:0 0 10%") Fixed Panel
-            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-            .cell(ld="middle",style="flex:0 0 10%") Flex Panel
-            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-            .cell(style="flex: 0 0 10%") Flex Panel
-        .flex-grow-1.w-50.align-items-stretch
-          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root",style="flex-direction:row-reverse")
-            .cell.dark(style="flex-basis:10%") Fixed Panel
-            .cell(style="flex:1 0 10%") Some Text
+      .d-flex.flex-column.g-4.h-100
+
+        .flex-grow-1.align-items-stretch(style="height:100px")
+          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
+            .cell.dark.text-nowrap.p-3(style="flex-basis:10%") Fixed Panel
+            .cell.py-2(style="flex:1 0 auto;width:fit-content")
+              .bg-info.cell.text-white.py-3(style="width:400px") Some Text
             .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
-            .cell(style="flex:0 0 10%") Some Text
+            .cell.py-2(style="flex:0 0 auto;width:fit-content")
+              .bg-info.cell.text-white.py-3(style="width:400px") Some Text
+
+        .d-flex.g-4.w-100.h-100.align-items-stretch.flex-grow-1
+          .flex-grow-1.w-50
+            .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
+              .cell.dark(style="flex-basis:10%;padding:.5em 0")
+                div Fixed Panel
+                .d-flex.g-2
+                  .btn.btn-primary(ld="reset") Reset
+                  .btn.btn-primary(ld="hide") Hide
+              .cell(style="flex:1 0 10%") Flex Panel
+              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+              .cell.flexize-fixed(ld="middle",style="flex:0 0 10%") Fixed Panel
+              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+              .cell(ld="middle",style="flex:0 0 10%") Flex Panel
+              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+              .cell(style="flex: 0 0 10%") Flex Panel
+          .flex-grow-1.w-50.align-items-stretch
+            .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(
+            ld="root",style="flex-direction:row-reverse")
+              .cell.dark(style="flex-basis:10%") Fixed Panel
+              .cell(style="flex:1 0 10%") Some Text
+              .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
+              .cell(style="flex:0 0 10%") Some Text
 
     +script([
     {name: "@loadingio/debounce.js"},

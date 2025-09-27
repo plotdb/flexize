@@ -24,9 +24,13 @@ flexize = (opt = {}) ->
         n: nn
         s: p: pn.getBoundingClientRect![attr], n: nn.getBoundingClientRect![attr]
         f: p: +getComputedStyle(pn).flexGrow,  n: +getComputedStyle(nn).flexGrow
+      window.addEventListener \mousemove, move-handler
 
-  window.addEventListener \mousemove, (evt) ~>
-    if !((drag = @_.drag) and (evt.buttons .&. 1)) => return @_.drag = null
+  move-handler = (evt) ~>
+    if !((drag = @_.drag) and (evt.buttons .&. 1)) =>
+      @_.drag = null
+      window.removeEventListener \mousemove, move-handler
+      return
     attr = @attr!
     reverse = @reverse!
     delta = if @dir! == \row => (evt.clientX - drag.ptr.x) else (evt.clientY - drag.ptr.y)
