@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.0.4
+
+ - fix bug: failed when working with style on non-Element nodes 
+ - tweak default selector for fixed cells to make it work for nested flexize
+
+
 ## v0.0.3
 
  - trigger mouse move event handler only when dragging
