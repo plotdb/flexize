@@ -4,7 +4,7 @@ flexize = (opt = {}) ->
     root: if typeof(opt.root) == \string => document.body.querySelector(opt.root) else opt.root
     selector:
       gutter: opt.gutter-selector or '& > .flexize-gutter, & > div > .flexize-gutter'
-      fixed: opt.fixed-selector or '.flexize-fixed'
+      fixed: opt.fixed-selector or '& > .flexize-fixed'
 
   @build!
   @estimate!
@@ -55,7 +55,7 @@ flexize.prototype = Object.create(Object.prototype) <<<
   reverse: -> @dir!; return !!/reverse/.exec(@_.cssdir or '')
   estimate: ->
     attr = @attr!
-    nodes = Array.from(@_.root.childNodes)
+    nodes = Array.from(@_.root.childNodes).filter (n) -> n instanceof Element
     gs = nodes.map (n) -> +getComputedStyle(n).flexGrow
     sum = gs.reduce(((a,b) -> a + b), 0)
     nodes.map (n) -> n.style.flexGrow = 0
@@ -78,7 +78,9 @@ flexize.prototype = Object.create(Object.prototype) <<<
     @_.panes.map (n,i) -> n.style.flexGrow = v[i] or 0
     @estimate!
   reset: ->
-    Array.from(@_.root.childNodes).map (n,i) ~> n.style.flexGrow = @_.initial-grow[i]
+    Array.from(@_.root.childNodes)
+      .filter (n) -> n instanceof Element
+      .map (n,i) ~> n.style.flexGrow = @_.initial-grow[i]
     @build!
     @estimate!
   _get-sibling: (g) ->
@@ -94,7 +96,8 @@ flexize.prototype = Object.create(Object.prototype) <<<
       (
         getComputedStyle(n).display == \none or
         @_.gutter-set.has(n) or
-        n.matches @_.selector.fixed
+        n.matches @_.selector.fixed or
+        !(n instanceof Element)
       )
     ) => continue
     return n

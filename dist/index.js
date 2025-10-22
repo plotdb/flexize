@@ -10,7 +10,7 @@
         : opt.root,
       selector: {
         gutter: opt.gutterSelector || '& > .flexize-gutter, & > div > .flexize-gutter',
-        fixed: opt.fixedSelector || '.flexize-fixed'
+        fixed: opt.fixedSelector || '& > .flexize-fixed'
       }
     };
     this.build();
@@ -97,7 +97,9 @@
   }, ref$.estimate = function(){
     var attr, nodes, gs, sum, size, nsize, space;
     attr = this.attr();
-    nodes = Array.from(this._.root.childNodes);
+    nodes = Array.from(this._.root.childNodes).filter(function(n){
+      return n instanceof Element;
+    });
     gs = nodes.map(function(n){
       return +getComputedStyle(n).flexGrow;
     });
@@ -141,7 +143,9 @@
     return this.estimate();
   }, ref$.reset = function(){
     var this$ = this;
-    Array.from(this._.root.childNodes).map(function(n, i){
+    Array.from(this._.root.childNodes).filter(function(n){
+      return n instanceof Element;
+    }).map(function(n, i){
       return n.style.flexGrow = this$._.initialGrow[i];
     });
     this.build();
@@ -160,7 +164,7 @@
     n = Object.fromEntries(this._getSibling(n).map(function(d, i){
       return [['previousSibling', 'nextSibling'][i], d];
     }));
-    while ((n = n[d]) && (getComputedStyle(n).display === 'none' || this._.gutterSet.has(n) || n.matches(this._.selector.fixed))) {}
+    while ((n = n[d]) && (getComputedStyle(n).display === 'none' || this._.gutterSet.has(n) || n.matches(this._.selector.fixed) || !(n instanceof Element))) {}
     return n;
   }, ref$);
   if (typeof window != 'undefined' && window !== null) {
