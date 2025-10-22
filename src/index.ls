@@ -3,7 +3,7 @@ flexize = (opt = {}) ->
     opt: opt
     root: if typeof(opt.root) == \string => document.body.querySelector(opt.root) else opt.root
     selector:
-      gutter: opt.gutter-selector or '.flexize-gutter'
+      gutter: opt.gutter-selector or '& > .flexize-gutter, & > div > .flexize-gutter'
       fixed: opt.fixed-selector or '.flexize-fixed'
 
   @build!

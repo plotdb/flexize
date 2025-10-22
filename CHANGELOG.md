@@ -4,6 +4,7 @@
 
  - trigger mouse move event handler only when dragging
  - support gutters inside cells
+ - alter default gutter selector to support up to one level depth inner gutter
 
 
 ## v0.0.2

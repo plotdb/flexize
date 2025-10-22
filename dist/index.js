@@ -9,7 +9,7 @@
         ? document.body.querySelector(opt.root)
         : opt.root,
       selector: {
-        gutter: opt.gutterSelector || '.flexize-gutter',
+        gutter: opt.gutterSelector || '& > .flexize-gutter, & > div > .flexize-gutter',
         fixed: opt.fixedSelector || '.flexize-fixed'
       }
     };

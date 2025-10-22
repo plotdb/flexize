@@ -39,8 +39,14 @@ html
           .flex-grow-1.w-50.align-items-stretch
             .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(
             ld="root",style="flex-direction:row-reverse")
-              .cell.dark(style="flex-basis:10%") Fixed Panel
-              .cell(style="flex:1 0 10%") Some Text
+              .cell.dark.text-center(style="flex-basis:10%") Fixed Panel
+              .cell(style="flex:1 0 10%")
+                .bg-info.w-100.h-100.d-flex.align-items-stretch.flex-nowrap.flex-column(ld="root")
+                  .cell(style="flex:1 0 10%") Inner Cell
+                  .bg-danger.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+                  .cell(style="flex:1 0 10%") Inner Cell
+                  .bg-danger.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+                  .cell(style="flex:1 0 10%") Inner Cell
               .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
               .cell(style="flex:0 0 10%") Some Text
 
