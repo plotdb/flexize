@@ -1,5 +1,6 @@
 flexize = (opt = {}) ->
   @_ =
+    gutter-inited: new WeakMap!
     opt: opt
     root: if typeof(opt.root) == \string => document.body.querySelector(opt.root) else opt.root
     selector:
@@ -8,40 +9,6 @@ flexize = (opt = {}) ->
 
   @build!
   @estimate!
-
-  @_.gutters.for-each (g) ~>
-    g.addEventListener \mousedown, (evt) ~>
-      @estimate!
-      attr = @attr!
-      pn = @_visible-sibling g, -1
-      nn = @_visible-sibling g, 1
-      if !(pn and nn) => return
-      @_.drag =
-        ptr: {x: evt.clientX, y: evt.clientY}
-        g: g
-        p: pn
-        n: nn
-        s: p: pn.getBoundingClientRect![attr], n: nn.getBoundingClientRect![attr]
-        f: p: +getComputedStyle(pn).flexGrow,  n: +getComputedStyle(nn).flexGrow
-      window.addEventListener \mousemove, move-handler
-
-  move-handler = (evt) ~>
-    if !((drag = @_.drag) and (evt.buttons .&. 1)) =>
-      @_.drag = null
-      window.removeEventListener \mousemove, move-handler
-      return
-    attr = @attr!
-    reverse = @reverse!
-    delta = if @dir! == \row => (evt.clientX - drag.ptr.x) else (evt.clientY - drag.ptr.y)
-    [n1, n2] = if delta < 0 => [drag.p, drag.n] else [drag.n, drag.p]
-    [s1, s2] = if delta < 0 => [drag.s.p, drag.s.n] else [drag.s.n, drag.s.p]
-    [g1, g2] = if delta < 0 => [drag.f.p, drag.f.n] else [drag.f.n, drag.f.p]
-    if reverse => [n1, n2, s1, s2, g1, g2] = [n2, n1, s2, s1, g2, g1]
-    percent = -Math.abs(delta / @_.free-space) * @_.total-grow #(g1 + g2)
-    ng1 = (g1 + percent) >? 0
-    ng2 = g2 + (g1 - ng1)
-    n1.style.flexGrow = ng1
-    n2.style.flexGrow = ng2
 
   @
 
@@ -74,6 +41,43 @@ flexize.prototype = Object.create(Object.prototype) <<<
       (n) <~ @_get-sibling(g).map _
       if set.has(n) => return else set.add n
     @_.panes = Array.from(set)
+
+    @_.gutters.for-each (g) ~>
+      if @_.gutter-inited.get(g) => return
+      @_.gutter-inited.set(g, true)
+      g.addEventListener \mousedown, (evt) ~>
+        @estimate!
+        attr = @attr!
+        pn = @_visible-sibling g, -1
+        nn = @_visible-sibling g, 1
+        if !(pn and nn) => return
+        @_.drag =
+          ptr: {x: evt.clientX, y: evt.clientY}
+          g: g
+          p: pn
+          n: nn
+          s: p: pn.getBoundingClientRect![attr], n: nn.getBoundingClientRect![attr]
+          f: p: +getComputedStyle(pn).flexGrow,  n: +getComputedStyle(nn).flexGrow
+        window.addEventListener \mousemove, @_.move-handler = (evt) ~> @_move-handler(evt)
+
+  _move-handler: (evt) ->
+    if !((drag = @_.drag) and (evt.buttons .&. 1)) =>
+      @_.drag = null
+      window.removeEventListener \mousemove, @_.move-handler
+      return
+    attr = @attr!
+    reverse = @reverse!
+    delta = if @dir! == \row => (evt.clientX - drag.ptr.x) else (evt.clientY - drag.ptr.y)
+    [n1, n2] = if delta < 0 => [drag.p, drag.n] else [drag.n, drag.p]
+    [s1, s2] = if delta < 0 => [drag.s.p, drag.s.n] else [drag.s.n, drag.s.p]
+    [g1, g2] = if delta < 0 => [drag.f.p, drag.f.n] else [drag.f.n, drag.f.p]
+    if reverse => [n1, n2, s1, s2, g1, g2] = [n2, n1, s2, s1, g2, g1]
+    percent = -Math.abs(delta / @_.free-space) * @_.total-grow #(g1 + g2)
+    ng1 = (g1 + percent) >? 0
+    ng2 = g2 + (g1 - ng1)
+    n1.style.flexGrow = ng1
+    n2.style.flexGrow = ng2
+
   set: (v = []) ->
     @_.panes.map (n,i) -> n.style.flexGrow = v[i] or 0
     @estimate!
@@ -94,10 +98,10 @@ flexize.prototype = Object.create(Object.prototype) <<<
     while (
       (n = n[d]) and
       (
+        !(n instanceof Element) or
         getComputedStyle(n).display == \none or
         @_.gutter-set.has(n) or
-        n.matches @_.selector.fixed or
-        !(n instanceof Element)
+        n.matches @_.selector.fixed
       )
     ) => continue
     return n
