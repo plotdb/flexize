@@ -1,6 +1,6 @@
 {
   "name": "flexize",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "flex-grow-based panel resizing tool for flexbox",
   "main": "dist/index.min.js",
   "scripts": {
