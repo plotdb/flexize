@@ -65,7 +65,7 @@ flexize.prototype = Object.create(Object.prototype) <<<
     nodes.map (n,i) -> n.style.flexGrow = gs[i]
     @_.free-space = space
     @_.total-grow = sum
-    @_.intial-grow = gs
+    @_.initial-grow = gs
   build: ->
     @_.gutters = Array.from(@_.root.querySelectorAll @_.selector.gutter)
     @_.gutter-set = new Set(@_.gutters)

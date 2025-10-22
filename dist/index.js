@@ -121,7 +121,7 @@
     });
     this._.freeSpace = space;
     this._.totalGrow = sum;
-    return this._.intialGrow = gs;
+    return this._.initialGrow = gs;
   }, ref$.build = function(){
     var set, this$ = this;
     this._.gutters = Array.from(this._.root.querySelectorAll(this._.selector.gutter));

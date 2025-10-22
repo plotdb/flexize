@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.0.5
+
+ - fix bug: reset fails due to typo in `initial-grow` name
+
+
 ## v0.0.4
 
  - fix bug: failed when working with style on non-Element nodes 
