@@ -8,19 +8,18 @@ html
     style(type="text/css"): include:stylus index.styl
   body
     .p-4.w-100.h-100
-      .d-flex.flex-column.g-4.h-100
-
-        .flex-grow-1.align-items-stretch(style="height:100px")
-          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
+      .d-flex.flex-column.h-100(ld="root")
+        .align-items-stretch(style="flex-basis:100px;flex-grow:0")
+          .bg-light.border.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
             .cell.dark.text-nowrap.p-3(style="flex-basis:10%") Fixed Panel
             .cell.py-2(style="flex:1 0 auto;width:fit-content")
               .bg-info.cell.text-white.py-3(style="width:400px") Some Text
             .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
             .cell.py-2(style="flex:0 0 auto;width:fit-content")
               .bg-info.cell.text-white.py-3(style="width:400px") Some Text
-
-        .d-flex.g-4.w-100.h-100.align-items-stretch.flex-grow-1
-          .flex-grow-1.w-50
+        .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+        .d-flex.w-100.align-items-stretch(style="flex-basis:10%;flex-grow:1",ld="root")
+          div(style="flex:1 0 20%")
             .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
               .cell.dark(style="flex-basis:10%;padding:.5em 0")
                 div Fixed Panel
@@ -36,7 +35,8 @@ html
               .cell.d-flex.flex-column(ld="middle",style="flex:0 0 10%") Flex Panel
               .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
               .cell(style="flex: 0 0 10%") Flex Panel
-          .flex-grow-1.w-50.align-items-stretch
+          .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
+          .align-items-stretch(style="flex:1 0 20%")
             .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(
             ld="root",style="flex-direction:row-reverse")
               .cell.dark.text-center(style="flex-basis:10%") Fixed Panel
