@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.0.6
+
+ - fix bug: `_visible-sibling` tried to get style of non-Element node.
+ - fix bug: resizing doesn't work when new elements are added.
+
+
 ## v0.0.5
 
  - fix bug: reset fails due to typo in `initial-grow` name
