@@ -27,12 +27,14 @@ html
                 .d-flex.g-2
                   .btn.btn-primary(ld="reset") Reset
                   .btn.btn-primary(ld="hide") Hide
-              .cell(style="flex:1 0 10%") Flex Panel
-              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+              .cell.d-flex.flex-column.justify-content-between(style="flex:1 0 10%")
+                div Flex Panel
+                //- inner gutter - for scenario that gutters are not allowed between cells
+                .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
               .cell.flexize-fixed(ld="middle",style="flex:0 0 10%") Fixed Panel
               .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-              .cell(ld="middle",style="flex:0 0 10%") Flex Panel
-              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+              .cell.d-flex.flex-column(ld="middle",style="flex:0 0 10%") Flex Panel
+              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
               .cell(style="flex: 0 0 10%") Flex Panel
           .flex-grow-1.w-50.align-items-stretch
             .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(

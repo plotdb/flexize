@@ -3,6 +3,7 @@
 ## v0.0.3 (upcoming)
 
  - trigger mouse move event handler only when dragging
+ - support gutters inside cells
 
 
 ## v0.0.2

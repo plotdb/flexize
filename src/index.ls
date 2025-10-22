@@ -13,7 +13,6 @@ flexize = (opt = {}) ->
     g.addEventListener \mousedown, (evt) ~>
       @estimate!
       attr = @attr!
-      [pn, nn] = [g.previousSibling, g.nextSibling]
       pn = @_visible-sibling g, -1
       nn = @_visible-sibling g, 1
       if !(pn and nn) => return
@@ -72,7 +71,7 @@ flexize.prototype = Object.create(Object.prototype) <<<
     @_.gutter-set = new Set(@_.gutters)
     set = new Set!
     @_.gutters.map (g) ~>
-      (n) <~ [g.previousSibling, g.nextSibling].map _
+      (n) <~ @_get-sibling(g).map _
       if set.has(n) => return else set.add n
     @_.panes = Array.from(set)
   set: (v = []) ->
@@ -82,8 +81,14 @@ flexize.prototype = Object.create(Object.prototype) <<<
     Array.from(@_.root.childNodes).map (n,i) ~> n.style.flexGrow = @_.initial-grow[i]
     @build!
     @estimate!
+  _get-sibling: (g) ->
+    n = g
+    while n.parentNode != @_.root => n = n.parentNode
+    return if g != n => [n, n.nextSibling]
+    else [n.previousSibling, n.nextSibling]
   _visible-sibling: (n, d) ->
     d = if d < 0 => \previousSibling else \nextSibling
+    n = Object.fromEntries @_get-sibling(n).map (d,i) -> [<[previousSibling nextSibling]>[i], d]
     while (
       (n = n[d]) and
       (

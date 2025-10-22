@@ -17,10 +17,9 @@
     this.estimate();
     this._.gutters.forEach(function(g){
       return g.addEventListener('mousedown', function(evt){
-        var attr, ref$, pn, nn;
+        var attr, pn, nn;
         this$.estimate();
         attr = this$.attr();
-        ref$ = [g.previousSibling, g.nextSibling], pn = ref$[0], nn = ref$[1];
         pn = this$._visibleSibling(g, -1);
         nn = this$._visibleSibling(g, 1);
         if (!(pn && nn)) {
@@ -122,12 +121,12 @@
     this._.totalGrow = sum;
     return this._.intialGrow = gs;
   }, ref$.build = function(){
-    var set;
+    var set, this$ = this;
     this._.gutters = Array.from(this._.root.querySelectorAll(this._.selector.gutter));
     this._.gutterSet = new Set(this._.gutters);
     set = new Set();
     this._.gutters.map(function(g){
-      return [g.previousSibling, g.nextSibling].map(function(n){
+      return this$._getSibling(g).map(function(n){
         if (set.has(n)) {} else {
           return set.add(n);
         }
@@ -147,8 +146,20 @@
     });
     this.build();
     return this.estimate();
+  }, ref$._getSibling = function(g){
+    var n;
+    n = g;
+    while (n.parentNode !== this._.root) {
+      n = n.parentNode;
+    }
+    return g !== n
+      ? [n, n.nextSibling]
+      : [n.previousSibling, n.nextSibling];
   }, ref$._visibleSibling = function(n, d){
     d = d < 0 ? 'previousSibling' : 'nextSibling';
+    n = Object.fromEntries(this._getSibling(n).map(function(d, i){
+      return [['previousSibling', 'nextSibling'][i], d];
+    }));
     while ((n = n[d]) && (getComputedStyle(n).display === 'none' || this._.gutterSet.has(n) || n.matches(this._.selector.fixed))) {}
     return n;
   }, ref$);
