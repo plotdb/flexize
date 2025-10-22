@@ -1,6 +1,6 @@
 # Change Logs
 
-## v0.0.3 (upcoming)
+## v0.0.3
 
  - trigger mouse move event handler only when dragging
  - support gutters inside cells
