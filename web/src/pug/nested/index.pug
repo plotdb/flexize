@@ -1,0 +1,21 @@
+extends /base.pug
+block head
+  style(type="text/css"): include:stylus index.styl
+block body
+  .p-5.w-100.h-100.list.c-col(ld="list")
+    .list.c-row.cell(ld="list")
+      .cell #[.dg]#[span A]#[.dg]
+      .dg
+      .cell #[.dg]#[span B]#[.dg]
+    .dg
+    .list.c-row.cell(ld="list")
+      .list.c-col.cell(ld="list")
+        .cell #[.dg]C#[.dg]
+        .dg
+        .cell #[.dg]D#[.dg]
+      .dg
+      .cell #[.dg]#[.dg]
+
+
+block script
+  script(type="module"): include:lsc index.ls
