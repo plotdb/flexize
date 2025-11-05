@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.0.7
+
+ - behavior changes: use position to determine sibling for inner gutter.
+
+
 ## v0.0.6
 
  - fix bug: `_visible-sibling` tried to get style of non-Element node.
