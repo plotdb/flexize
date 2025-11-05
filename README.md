@@ -79,6 +79,8 @@ flexize determines inner gutters based on their position within a cell:
  - last child: works as gutter after its host cell
  - only child: works as gutter for both side around its host cell
 
+Note that based on the selector you used, a gutter may affect grandparent nodes. use explicit selector to only select a desired child as gutter if necessary. See `web/src/pug/nested` for a live example.
+
 
 ## APIs 
 
