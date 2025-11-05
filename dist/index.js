@@ -162,7 +162,11 @@
       n = n.parentNode;
     }
     return g !== n
-      ? [n, n.nextSibling]
+      ? g.previousSibling && !g.nextSibling
+        ? [n, n.nextSibling]
+        : !g.previousSibling && n.nextSibling
+          ? [n.previousSibling, n]
+          : [n.previousSibling || n, n.nextSibling || n]
       : [n.previousSibling, n.nextSibling];
   }, ref$._visibleSibling = function(n, d){
     d = d < 0 ? 'previousSibling' : 'nextSibling';

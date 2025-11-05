@@ -88,10 +88,14 @@ flexize.prototype = Object.create(Object.prototype) <<<
     @build!
     @estimate!
   _get-sibling: (g) ->
+    # for gutter g, get its effectie sibling cell
     n = g
     while n.parentNode != @_.root => n = n.parentNode
-    return if g != n => [n, n.nextSibling]
-    else [n.previousSibling, n.nextSibling]
+    return if g != n =>
+      if g.previousSibling and !g.nextSibling=> [n, n.nextSibling] # inner gutter, last child
+      else if !g.previousSibling and n.nextSibling => [n.previousSibling, n] # inner gutter, first child
+      else [n.previousSibling or n, n.nextSibling or n] # inner gutter, onlt child
+    else [n.previousSibling, n.nextSibling] # normal gutter
   _visible-sibling: (n, d) ->
     d = if d < 0 => \previousSibling else \nextSibling
     n = Object.fromEntries @_get-sibling(n).map (d,i) -> [<[previousSibling nextSibling]>[i], d]

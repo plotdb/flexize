@@ -59,6 +59,27 @@ Here is another example with flex provided:
 Fixed nodes and Hidden nodes (with `display` set to `none`) will be ignored and all gutters will automatically look up for the next visible panes to resize.
 
 
+## Gutters Inside a Cell
+
+You can place gutters inside a cell element:
+
+    .container
+      .cell
+        .gutter
+      .cell
+        .gutter
+        span content
+        .gutter
+      .cell
+        .gutter
+
+flexize determines inner gutters based on their position within a cell:
+
+ - first child: works as gutter before its host cell
+ - last child: works as gutter after its host cell
+ - only child: works as gutter for both side around its host cell
+
+
 ## APIs 
 
  - `set(list = [])`: manual set flex-grow from values in `list` array.
