@@ -1,6 +1,6 @@
 # Change Logs
 
-## v0.0.7 (upcoming)
+## v0.0.7
 
  - behavior changes: use position to determine sibling for inner gutter.
 
