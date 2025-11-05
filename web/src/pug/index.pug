@@ -1,60 +1,48 @@
-doctype html
-html
-  head
-    +css([
-    {name: "bootstrap", path: "dist/css/bootstrap.min.css"},
-    {name: "@loadingio/bootstrap.ext"}
-    ])
-    style(type="text/css"): include:stylus index.styl
-  body
-    .p-4.w-100.h-100
-      .d-flex.flex-column.h-100(ld="root")
-        .align-items-stretch(style="flex-basis:100px;flex-grow:0")
-          .bg-light.border.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
-            .cell.dark.text-nowrap.p-3(style="flex-basis:10%") Fixed Panel
-            .cell.py-2(style="flex:1 0 auto;width:fit-content")
-              .bg-info.cell.text-white.py-3(style="width:400px") Some Text
-            .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
-            .cell.py-2(style="flex:0 0 auto;width:fit-content")
-              .bg-info.cell.text-white.py-3(style="width:400px") Some Text
-        .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-        .d-flex.w-100.align-items-stretch(style="flex-basis:10%;flex-grow:1",ld="root")
-          div(style="flex:1 0 20%")
-            .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
-              .cell.dark(style="flex-basis:10%;padding:.5em 0")
-                div Fixed Panel
-                .d-flex.g-2
-                  .btn.btn-primary(ld="reset") Reset
-                  .btn.btn-primary(ld="hide") Hide
-              .cell.d-flex.flex-column.justify-content-between(style="flex:1 0 10%")
-                div Flex Panel
-                //- inner gutter - for scenario that gutters are not allowed between cells
-                .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
-              .cell.flexize-fixed(ld="middle",style="flex:0 0 10%") Fixed Panel
-              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-              .cell.d-flex.flex-column(ld="middle",style="flex:0 0 10%") Flex Panel
-              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
-              .cell(style="flex: 0 0 10%") Flex Panel
+extends /base.pug
+block head
+  style(type="text/css"): include:stylus index.styl
+block body
+  .p-4.w-100.h-100
+    .d-flex.flex-column.h-100(ld="root")
+      .align-items-stretch(style="flex-basis:100px;flex-grow:0")
+        .bg-light.border.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(ld="root")
+          .cell.dark.text-nowrap.p-3(style="flex-basis:10%") Fixed Panel
+          .cell.py-2(style="flex:1 0 auto;width:fit-content")
+            .bg-info.cell.text-white.py-3(style="width:400px") Some Text
           .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
-          .align-items-stretch(style="flex:1 0 20%")
-            .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(
-            ld="root",style="flex-direction:row-reverse")
-              .cell.dark.text-center(style="flex-basis:10%") Fixed Panel
-              .cell(style="flex:1 0 10%")
-                .bg-info.w-100.h-100.d-flex.align-items-stretch.flex-nowrap.flex-column(ld="root")
-                  .cell(style="flex:1 0 10%") Inner Cell
-                  .bg-danger.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-                  .cell(style="flex:1 0 10%") Inner Cell
-                  .bg-danger.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
-                  .cell(style="flex:1 0 10%") Inner Cell
-              .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
-              .cell(style="flex:0 0 10%") Some Text
-
-    +script([
-    {name: "@loadingio/debounce.js"},
-    {name: "@loadingio/ldquery"},
-    {name: "proxise"},
-    {name: "ldview"},
-    {name: "flexize", version: "dev"}
-    ])
-    script(type="module"): include:lsc index.ls
+          .cell.py-2(style="flex:0 0 auto;width:fit-content")
+            .bg-info.cell.text-white.py-3(style="width:400px") Some Text
+      .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+      .d-flex.w-100.align-items-stretch(style="flex-basis:10%;flex-grow:1",ld="root")
+        div(style="flex:1 0 20%")
+          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.flex-column.align-item-stretch.flex-nowrap(ld="root")
+            .cell.dark(style="flex-basis:10%;padding:.5em 0")
+              div Fixed Panel
+              .d-flex.g-2
+                .btn.btn-primary(ld="reset") Reset
+                .btn.btn-primary(ld="hide") Hide
+            .cell.d-flex.flex-column.justify-content-between(style="flex:1 0 10%")
+              div Flex Panel
+              //- inner gutter - for scenario that gutters are not allowed between cells
+              .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
+            .cell.flexize-fixed(ld="middle",style="flex:0 0 10%") Fixed Panel
+            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+            .cell.d-flex.flex-column(ld="middle",style="flex:0 0 10%") Flex Panel
+            .bg-dark.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer;width:100%")
+            .cell(style="flex: 0 0 10%") Flex Panel
+        .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
+        .align-items-stretch(style="flex:1 0 20%")
+          .bg-light.shadow-sm.border.rounded.w-100.h-100.d-flex.align-item-stretch.flex-nowrap(
+          ld="root",style="flex-direction:row-reverse")
+            .cell.dark.text-center(style="flex-basis:10%") Fixed Panel
+            .cell(style="flex:1 0 10%")
+              .bg-info.w-100.h-100.d-flex.align-items-stretch.flex-nowrap.flex-column(ld="root")
+                .cell(style="flex:1 0 10%") Inner Cell
+                .bg-danger.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+                .cell(style="flex:1 0 10%") Inner Cell
+                .bg-danger.flexize-gutter(style="height:10px;flex:0 0 auto;cursor:pointer")
+                .cell(style="flex:1 0 10%") Inner Cell
+            .bg-dark.flexize-gutter(style="width:10px;flex:0 0 auto;cursor:pointer")
+            .cell(style="flex:0 0 10%") Some Text
+block script
+  script(type="module"): include:lsc index.ls

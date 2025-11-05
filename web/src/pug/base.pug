@@ -1,0 +1,21 @@
+//- module
+doctype html
+html
+  block var
+  head
+    block prehead
+    +css([
+    {name: "bootstrap", path: "dist/css/bootstrap.min.css"},
+    {name: "@loadingio/bootstrap.ext"}
+    ])
+    block head
+  body
+    block body
+    +script([
+    {name: "@loadingio/debounce.js"},
+    {name: "@loadingio/ldquery"},
+    {name: "proxise"},
+    {name: "ldview"},
+    {name: "flexize", version: "dev"}
+    ])
+    block script
