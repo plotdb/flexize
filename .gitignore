@@ -5,3 +5,4 @@ node_modules
 .*.swp
 web/static/assets/lib
 aicorpus
+web/.view
