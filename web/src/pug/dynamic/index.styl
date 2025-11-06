@@ -1,0 +1,10 @@
+.dg.added
+  border-color: #f00
+
+.cell.added
+  border: 1px solid #f00
+  color: #f00
+.cell:not(.list) > .dg.added
+  position: absolute
+  &:first-child { left: 0; top: 0; border-color: #f00 transparent transparent #f00}
+  &:last-child { right: 0; bottom: 0; border-color: transparent #f00 #f00 transparent}
