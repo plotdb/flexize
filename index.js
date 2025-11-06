@@ -3,6 +3,7 @@
   flexize = function(opt){
     opt == null && (opt = {});
     this._ = {
+      evthdr: {},
       gutterInited: new WeakMap(),
       opt: opt,
       root: typeof opt.root === 'string'
@@ -17,25 +18,51 @@
     this.estimate();
     return this;
   };
-  flexize.prototype = (ref$ = Object.create(Object.prototype), ref$.dir = function(){
-    var that, s, ref$;
-    if (that = this._.dir) {
-      return that;
+  flexize.prototype = (ref$ = Object.create(Object.prototype), ref$.on = function(n, cb){
+    var this$ = this;
+    return (Array.isArray(n)
+      ? n
+      : [n]).map(function(n){
+      var ref$;
+      return ((ref$ = this$._.evthdr)[n] || (ref$[n] = [])).push(cb);
+    });
+  }, ref$.fire = function(n){
+    var v, res$, i$, to$, ref$, len$, cb, results$ = [];
+    res$ = [];
+    for (i$ = 1, to$ = arguments.length; i$ < to$; ++i$) {
+      res$.push(arguments[i$]);
+    }
+    v = res$;
+    for (i$ = 0, len$ = (ref$ = this._.evthdr[n] || []).length; i$ < len$; ++i$) {
+      cb = ref$[i$];
+      results$.push(cb.apply(this, v));
+    }
+    return results$;
+  }, ref$.dir = function(arg$){
+    var reset, ref$, s;
+    reset = (ref$ = (arg$ != null
+      ? arg$
+      : {}).reset) != null ? ref$ : false;
+    if (!reset && this._.dir) {
+      return this._.dir;
     }
     s = getComputedStyle(this._.root);
     this._.cssdir = s.flexDirection;
     return this._.dir = (ref$ = this._.cssdir || 'row') === 'row' || ref$ === 'row-reverse' ? 'row' : 'column';
-  }, ref$.attr = function(){
-    if (this.dir() === 'row') {
+  }, ref$.attr = function(o){
+    if (this.dir(o) === 'row') {
       return 'width';
     } else {
       return 'height';
     }
   }, ref$.reverse = function(){
-    this.dir();
+    this.dir(o);
     return !!/reverse/.exec(this._.cssdir || '');
   }, ref$.estimate = function(){
     var attr, nodes, gs, sum, size, nsize, space;
+    this.dir({
+      reset: true
+    });
     attr = this.attr();
     nodes = Array.from(this._.root.childNodes).filter(function(n){
       return n instanceof Element;
@@ -63,7 +90,7 @@
     this._.totalGrow = sum;
     return this._.initialGrow = gs;
   }, ref$.build = function(){
-    var set, this$ = this;
+    var set, mousedown, initGutter, this$ = this;
     this._.gutters = Array.from(this._.root.querySelectorAll(this._.selector.gutter));
     this._.gutterSet = new Set(this._.gutters);
     set = new Set();
@@ -75,13 +102,22 @@
       });
     });
     this._.panes = Array.from(set);
-    return this._.gutters.forEach(function(g){
+    this._.root.addEventListener('mousedown', function(evt){
+      var g;
+      g = evt.target;
       if (this$._.gutterInited.get(g)) {
         return;
       }
-      this$._.gutterInited.set(g, true);
-      return g.addEventListener('mousedown', function(evt){
+      if (!in$(g, Array.from(this$._.root.querySelectorAll(this$._.selector.gutter)))) {
+        return;
+      }
+      initGutter(g);
+      return mousedown(g)(evt);
+    });
+    mousedown = function(g){
+      return function(evt){
         var attr, pn, nn;
+        this$.fire('resize:start');
         this$.estimate();
         attr = this$.attr();
         pn = this$._visibleSibling(g, -1);
@@ -109,13 +145,22 @@
         return window.addEventListener('mousemove', this$._.moveHandler = function(evt){
           return this$._moveHandler(evt);
         });
-      });
-    });
+      };
+    };
+    initGutter = function(g){
+      if (this$._.gutterInited.get(g)) {
+        return;
+      }
+      this$._.gutterInited.set(g, true);
+      return g.addEventListener('mousedown', mousedown(g));
+    };
+    return this._.gutters.forEach(initGutter);
   }, ref$._moveHandler = function(evt){
     var drag, attr, reverse, delta, ref$, n1, n2, s1, s2, g1, g2, percent, ng1, ng2;
     if (!((drag = this._.drag) && evt.buttons & 1)) {
       this._.drag = null;
       window.removeEventListener('mousemove', this._.moveHandler);
+      this.fire('resize:end');
       return;
     }
     attr = this.attr();
@@ -180,5 +225,10 @@
     window.flexize = flexize;
   } else {
     module.exports = flexize;
+  }
+  function in$(x, xs){
+    var i = -1, l = xs.length >>> 0;
+    while (++i < l) if (x === xs[i]) return true;
+    return false;
   }
 }).call(this);
