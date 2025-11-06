@@ -85,7 +85,9 @@ Note that based on the selector you used, a gutter may affect grandparent nodes.
 ## APIs 
 
  - `set(list = [])`: manual set flex-grow from values in `list` array.
- - `reset()`: reset space distribution to initial state.
+ - `build()`: prepare required DOM and initialize them
+ - `estimate()`: recalculate spaces available for flex to resizing
+ - `reset()`: reset space distribution to initial state. Include `build()` and `estimate()` combo
 
 
 ## License
