@@ -1,26 +1,29 @@
 flexize = (opt = {}) ->
   @_ =
+    evthdr: {}
     gutter-inited: new WeakMap!
     opt: opt
     root: if typeof(opt.root) == \string => document.body.querySelector(opt.root) else opt.root
     selector:
       gutter: opt.gutter-selector or '& > .flexize-gutter, & > div > .flexize-gutter'
       fixed: opt.fixed-selector or '& > .flexize-fixed'
-
   @build!
   @estimate!
 
   @
 
 flexize.prototype = Object.create(Object.prototype) <<<
-  dir: ->
-    if @_.dir => return that
+  on: (n, cb) -> (if Array.isArray(n) => n else [n]).map (n) ~> @_.evthdr[][n].push cb
+  fire: (n, ...v) -> for cb in (@_.evthdr[n] or []) => cb.apply @, v
+  dir: ({reset = false} = {}) ->
+    if !reset and @_.dir => return @_.dir
     s = getComputedStyle @_.root
     @_.cssdir = s.flexDirection
     @_.dir = if (@_.cssdir or 'row') in <[row row-reverse]> => \row else \column
-  attr: -> if @dir! == \row => \width else \height
-  reverse: -> @dir!; return !!/reverse/.exec(@_.cssdir or '')
+  attr: (o) -> if @dir(o) == \row => \width else \height
+  reverse: -> @dir(o); return !!/reverse/.exec(@_.cssdir or '')
   estimate: ->
+    @dir reset: true
     attr = @attr!
     nodes = Array.from(@_.root.childNodes).filter (n) -> n instanceof Element
     gs = nodes.map (n) -> +getComputedStyle(n).flexGrow
@@ -42,28 +45,41 @@ flexize.prototype = Object.create(Object.prototype) <<<
       if set.has(n) => return else set.add n
     @_.panes = Array.from(set)
 
-    @_.gutters.for-each (g) ~>
+    @_.root.addEventListener \mousedown, (evt) ~>
+      g = evt.target
+      if @_.gutter-inited.get g => return
+      if !(g in Array.from(@_.root.querySelectorAll @_.selector.gutter)) => return
+      init-gutter g
+      mousedown(g) evt
+
+    mousedown = (g) ~> (evt) ~>
+      @fire \resize:start
+      @estimate!
+      attr = @attr!
+      pn = @_visible-sibling g, -1
+      nn = @_visible-sibling g, 1
+      if !(pn and nn) => return
+      @_.drag =
+        ptr: {x: evt.clientX, y: evt.clientY}
+        g: g
+        p: pn
+        n: nn
+        s: p: pn.getBoundingClientRect![attr], n: nn.getBoundingClientRect![attr]
+        f: p: +getComputedStyle(pn).flexGrow,  n: +getComputedStyle(nn).flexGrow
+      window.addEventListener \mousemove, @_.move-handler = (evt) ~> @_move-handler(evt)
+
+    init-gutter = (g) ~>
       if @_.gutter-inited.get(g) => return
       @_.gutter-inited.set(g, true)
-      g.addEventListener \mousedown, (evt) ~>
-        @estimate!
-        attr = @attr!
-        pn = @_visible-sibling g, -1
-        nn = @_visible-sibling g, 1
-        if !(pn and nn) => return
-        @_.drag =
-          ptr: {x: evt.clientX, y: evt.clientY}
-          g: g
-          p: pn
-          n: nn
-          s: p: pn.getBoundingClientRect![attr], n: nn.getBoundingClientRect![attr]
-          f: p: +getComputedStyle(pn).flexGrow,  n: +getComputedStyle(nn).flexGrow
-        window.addEventListener \mousemove, @_.move-handler = (evt) ~> @_move-handler(evt)
+      g.addEventListener \mousedown, mousedown(g)
+
+    @_.gutters.for-each init-gutter
 
   _move-handler: (evt) ->
     if !((drag = @_.drag) and (evt.buttons .&. 1)) =>
       @_.drag = null
       window.removeEventListener \mousemove, @_.move-handler
+      @fire \resize:end
       return
     attr = @attr!
     reverse = @reverse!

@@ -1,5 +1,12 @@
 # Change Logs
 
+## v0.0.8
+
+ - support dynamic gutter insertion
+ - fire resize event at the begin and end of a resizing session
+ - add `reset` parameter in `dir`, `attr` and `reverse` API for clearing cached result
+
+
 ## v0.0.7
 
  - behavior changes: use position to determine sibling for inner gutter.
