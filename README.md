@@ -88,6 +88,19 @@ Note that based on the selector you used, a gutter may affect grandparent nodes.
  - `build()`: prepare required DOM and initialize them
  - `estimate()`: recalculate spaces available for flex to resizing
  - `reset()`: reset space distribution to initial state. Include `build()` and `estimate()` combo
+ - `dir(opt)`: return current direction ( `row` or `column` ) as a string.
+   - it returns cached value, so please use `reset` if you need the latest value.
+   - `opt`: optional object with following parameter:
+     - `reset`: optional. default false. when true, get and cache a new value from latest computed result.
+ - `reverse(opt)`: return true if current flex direction is reversed.
+   - `opt`: see `dir(opt)`.
+   - like `dir(opt)`, this is also cached.
+ - `attr(opt)`: return attribute name of the direction to grow, either `width` or `height`.
+   - `opt`: see `dir(opt)`.
+   - like `dir(opt)`, this is also cached.
+ - `fire(n, v)`: fire an event named `n` with value `v`.
+ - `on(n, cb)`: listen to event `n` and handle by callback function `cb`.
+   - `n` can be either a string or an array.
 
 
 ## License
