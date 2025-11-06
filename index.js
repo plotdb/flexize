@@ -55,7 +55,7 @@
     } else {
       return 'height';
     }
-  }, ref$.reverse = function(){
+  }, ref$.reverse = function(o){
     this.dir(o);
     return !!/reverse/.exec(this._.cssdir || '');
   }, ref$.estimate = function(){
