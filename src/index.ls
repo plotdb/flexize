@@ -21,7 +21,7 @@ flexize.prototype = Object.create(Object.prototype) <<<
     @_.cssdir = s.flexDirection
     @_.dir = if (@_.cssdir or 'row') in <[row row-reverse]> => \row else \column
   attr: (o) -> if @dir(o) == \row => \width else \height
-  reverse: -> @dir(o); return !!/reverse/.exec(@_.cssdir or '')
+  reverse: (o) -> @dir(o); return !!/reverse/.exec(@_.cssdir or '')
   estimate: ->
     @dir reset: true
     attr = @attr!

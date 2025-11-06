@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.0.9
+
+ - fix bug: exception when `reverse` is called, due to use of undefined parameter name
+
+
 ## v0.0.8
 
  - support dynamic gutter insertion
